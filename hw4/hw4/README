@@ -1,0 +1,8 @@
+Keilani Caruso kcaruso4 kcaruso4@jhu.edu
+
+Discussion
+Part A:
+For the Calc I only have three error conditions: Bad token, Not enough arguments, and Division by zero.
+Bad token is printed when a user enters any string or number that is not a specified operation (+ - / * % ? . !) or an integer value. An example of the inputs that would lead to this error message are: ++ 1.3 blah 2*2 . This is an error condition because any of the inputs not specified above do not have a corresponding function or value in the integer RPN calculator.
+Not enough arguments is printed when the user enters + - / * % or . because all of these command are dependent on the stack having values. Other than the . operator which simply requires a single element to be present in the stack to pop it, the other operators (arithmetic) must have at least two entries to perform a legal operation. Therefore if the stack does not contain the proper amount of entries for the given operation specified by the user, the RPN calculator will not be able to legally function. An example of input that would lead to this error is: . 12 + . This error would first be called when . is scanned in because there are initially no values in the stack. Then it would be called a second time by + because there is only one value (12) in the stack.
+Division by zero is an error for when a user enters a line such as 3 0 / (in post-fix arithmetic expression). This input is unacceptable because no number can be legally divided by zero.

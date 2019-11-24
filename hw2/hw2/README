@@ -1,0 +1,8 @@
+Discussion
+
+Part A:
+1. In order to know when I needed to increase the size of the array I had a variable called count that I would add to every time I added a unique value. Every time I scanned in new value I would check to see if the count of unique elements equaled the array length. Within the if statement I created a temporary array of 2 times the size of the current array and copied the values from the original one to the new one. After copying all the values the original variable got the new temporary array.
+
+Part B:
+1. SparseArray would be useful when you have a large array of numbers where most of them will generally not be modified. There for efficiency they array would only store the select few that would change.
+2. Because SparseArray will only store the elements that are changed and those elements are not necessarily changed in ascending index order, you will only be able to access the elements using an iterator.

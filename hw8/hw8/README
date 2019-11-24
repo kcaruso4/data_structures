@@ -1,0 +1,137 @@
+Keilani Caruso - kcaruso4
+David Skaff - dskaff1
+
+"Our Story"
+
+ (\____/)
+( ͡ ͡° ͜ ʖ ͡ ͡°)
+ \╭☞ \╭☞     ye ye. gang gang.
+
+
+Our Overall Development Plan:
+
+    We first met together in BLC 1030 and white boarded a list of all the things
+    we would have to do. We decided to first code JHUgle and test it with
+    a SimpleMap implementation to ensure that it was reliable for our future
+    HashMap iterations. We would then make sure our MapTest was functional and
+    accounted for edge cases before beginning to code any HashMap iteration.
+
+JHUgle.java, a painful search engine:
+
+    We broke JHUgle into two main parts:
+        1. File reading and index building
+        2. User input and logical expression handling
+
+    1:
+    The file scanning and index building is all handled within a single while
+    loop.
+
+    Assuming the file opening didn't fail, the while loop will keep
+    iterating as long as there is something more to scan in. We assumed that
+    the files passed into this program are all formatted as described in the
+    write up: alternating urls and key lists by line. With that, we would scan
+    two lines in with each pass, the first being assigned to a string to hold
+    the url and the second being split by whitespaces into an array of strings
+    to hold the key words.
+
+    From there, a for loop will iterate for each key word in the keys array and
+    pass each through an if else chain. The if statement checks to see if that
+    particular key word already exists within the Index. If it does, then its
+    associated value is taken from the Index, the new url is appended to that
+    list, and then Map's put(K, V) functionality is called to update the
+    existing key. If the key doesn't exist, then a new ArrayList<String> val is
+    created and the key value pair is inserted into the Index with insert(K, V).
+
+    These nested loops complete the Index efficiently.
+
+    2:
+    Moving onto the user input and ongoing boolean expression, we started that
+    portion of the implementation by copying over one of our Calc programs from
+    hw4. The Pattern object was simplified to one that would check for all the
+    operations. And the while loop that runs while there is still user input to
+    collect (and while ! hasn't been called yet) was updated to check for a
+    matching pattern first, else, scanning in the inputted string as a key word.
+
+    The scanned in key words would be used to try to find a matching key in the
+    built index, where the associated ArrayList would be added to the stack if
+    found, and where a new empty ArrayList would be made and added to the stack
+    if not.
+
+    The operations are all handled in a separate helper function method that
+    only returns false if ! is called. The helper function begins by checking
+    for !. Then checks to see if the stack is empty as every other function
+    depends on there being at least one value present. Then checks for ? and
+    prints out the arrayList content of the latest value with a for loop.
+    Then it begins to pop two arrayLists from the stack to manipulate with
+    && and ||. &&'s intersection is achieved with arrayList's retainAll
+    function, while ||'s unique union is achieved with a for loop to ensure that
+    the produced arrayList is a set.
+
+    ChainingHashMap.java
+    	The first implementation we wrote was chaining hash map. We decided to write this
+    	implementation using a 2D array. While we understood that it would have the worst space
+    	complexity, we wrote this implementation to help us visualize and work through writing the
+    	methods. Using a 2D array allowed us to draw out on a piece of paper how each of the functions
+    	should iterate through the hash map, what we needed to check for each cell in the array, and
+    	when we need to resize the hash map. One of the advantages of writing this implementation first
+    	was that we were able to wrap our heads around what a hash map through writing this simple
+    	implementation and working with tombstones. When we wrote this implementation we realized we
+    	were going to represent our tombstones by making the key value pair store the key but have a
+    	null value. When writing this we also made the decision to include tombstones in the node
+    	transfers when we resized because resizing happens without the user's knowledge and should
+    	therefore represent the insertions and removals at any size of hash table for efficient finds.
+    LinkedChainingHashMap.java
+    	The next implementation we wrote was a chaining hash map that used linked lists. We decided to
+    	write this implementation because we wanted to write a chaining hash map that was more space
+    	efficient. Therefore by using a linked lists we only used the space needed to store the key
+    	value pairs. The main problem we ran into when we wrote this implementation was when we resized
+    	the hash table. Every time we reinserted the node, we forgot the make its previous and next
+    	values null and that gave us a lot of problems. Another design choice we made was to make the
+    	chaining a doubly linked list. We decided to do doubly linked lists because it would make
+    	removing a key value pair much easier.
+    LinearProbeChainingHashMap.java
+    	The next implementation we decided to write was linear probing for an open addressing hash map.
+    	This map differed from chaining because it used a 1D array of nodes. The main problem we had
+    	when we were working on this implementation was that we had to account for wrapping around
+    	when we checked the elements of the array (circular array). In order to account for this, when
+    	we probed the array, we checked at the (compressed hashcode + 1) % size of the array. We also
+    	used the same style of tombstones as the ones found in the first chaining implementation.
+    QuadProbeChainingHashMap.java
+    	The last implementation we wrote was the quadratic linear probing for open addressing hash map.
+    	This map was essentially the same as the linear probing implementation except for when we
+    	probed the array we checked at the (compressed hashcode + i^2) % size of the array and used a
+    	for loop to iterate from i = 0 to i = size of the array -1.
+    Overall Consistencies between the implementations:
+    	For each of the implementations, we decided to have an integer array of prime values. This
+    	array stored 28 values that ranged from 17 to 1610612741. Therefore every time we resized the
+    	hash table we would take the current size, double it, then find the smallest prime value and
+    	set the size of the resized hash table to that prime. We chose to do this because this was the
+    	most efficient way to resize the hash table to get unique indices. We also decided to use the
+    	hashCode() function provided by the Java library, because it was the most efficient function
+    	to create hashcode for generic values. In order to determine the indices at which the key value
+    	pairs would be located, we took the hashcode and moded it by the size of the array in order to
+    	increase the odds of getting a unique index. We also decided to resize the hash table when the
+    	load was greater than 50% to ensure that insert had expected constant time. The main problem
+    	we ran into was with out find function. Originally all of our hash tables took an excessive
+    	amount of time because we forgot to account for tombstones. After realizing the problem, we
+    	changed the find function to first check and see if the cell was empty and if it was we exited
+    	the search. This then cut our index creation time significantly and our hash tables were
+    	performing as expected. Another issue we ran into was when we resized. We originally made a
+    	temporary array that stored all of the nodes in the hash table, made a bigger array, then
+    	transferred from the temp to the bigger array. This was a waste of space and time so we changed
+    	or design to transfer directly from the old array to the new and bigger hash table.
+
+
+
+TIMES:
+
+Each Test Ran 6 times, Recorded Range of outputted values with XTime.
+
+Linear Probe:
+1917-2079ms 62548-81500kb
+Quad Probe:
+1892-2177ms 75682-96222kb
+Chaining:
+1998-2462ms 163178-188481kb
+Linked Chaining:
+2032-2187ms 88441-96869kb

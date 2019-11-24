@@ -1,0 +1,67 @@
+hw7
+
+Part A:
+Some of the difficulties I encountered in testing rotations for the Avl and Treap map implementations is that I would not have direct access to the nodes (thus the entire structure) of the tree. Therefore for the Avl Map I decided to directly test the four rotation functions by strategically inserting keys and values that would cause the following rotations: singleR, singleL, doubleRL, and doubleLR. For the singleR, I tested to make sure that the operation would be performed when I created the following tree:
+                B
+              /   \
+             C     A
+In order to ensure a rotation was performed I first inserted C, then B, then A to cause the right side to be heavier than the left. Then I tested to make sure the root of the tree held the expected key of B.
+Then to test that the rotation would be performed upon removal, I inserted the key D and then removed the key A. I then tested to make sure the root held the expected key of C.
+
+For singleL I tested to make sure that the operation would be performed when I created the tree:
+                C
+              /   \
+             D     B
+In order to ensure a rotation was performed I first inserted A, then B, then C to cause the left side to be heavier than the left. Then I tested to make sure the root of the tree held the expected key of B.
+To make sure the rotation was performed when I removed values, I inserted the key A and removed D. I then tested to make sure the root held the expected key of B.
+
+Because I knew that these rotations would be further tested when I performed doubleRL and doubleLR rotations because the function definitions called the singleRight and singleLeft functions, I moved forward in my testing.
+
+For doubleRL testing I created the tree:
+                        G
+                      /   \
+                     H     B
+                         /   \
+                        E     A
+                       /
+                      F
+based on my insertion statements. I inserted the keys in the following order: G, B, H, E, A, F to ensure the tree was balanced until I wanted the rotations to be performed. Because the rotations are called to maintain the balance of the tree upon insertion and deletion, I then tested to make sure the root held the expected key D.
+Expected tree after doubleRL:
+                        E
+                      /   \
+                     G     B
+                    / \     \
+                   H   F     A
+To make sure the rotations were performed when values were removed, I inserted the key C and D. Then I removed the keys F and H. I then tested to make sure the expected root held the key C.
+
+For doubleLR testing I created the tree:
+                        G
+                      /   \
+                     O     B
+                    / \
+                   Z   L
+                      /
+                     K
+based on the insertion statements. I inserted the keys in the following order: G, B, O, L, Z, K in order to preserve balance until I wanted the rotation to happen. I then tested to make sure the root held the expected key L.
+Expected tree after doubleLR:
+                        L
+                      /   \
+                     O     G
+                    /    /  \
+                   Z    K    B
+
+To make sure the rotations were performed when values were removed, I inserted the keys N and M and removed the keys K and B. I then tested to make sure the root held the expect key K.
+
+
+
+For treap testing, I decided to write more thorough tests for insertion and removal. I first tested that I could not insert to a key that is null or already mapped to. I then inserted a total of two keys and used a public helper function that returns the priority of the root to check and make sure that after the insertion the priority is either the same or larger. I then retested the same case after inserting two more key, value pairs. For the remove function I tested to make sure that the operation could not be performed when given a key that is null or not mapped to. I then had a tree with 4 keys and values inserted. I then removed a single key and using the same helper function as previously stated I checked to make sure the root priority was either equal to or less than the root priority before the remove. I removed two more keys after that checking for the same thing.
+
+
+Part D:
+                        Dracula         Comediettas         Frankenstein
+SimpleMap               3.7044          1.5241              1.9830
+BinarySearchTreeMap     .17232          .06959              .10709
+AvlTreeMap              .19685          .09047              .11368
+TreapMap                .21366          .09082              .12836
+
+Observations: SimpleMap was significantly worse than the other maps in time complexity. While BinarySearchTreeMap, AvlTreeMap, and TreapMap insertion and putting took less than half a second for all of the texts, SimpleMap took multiple seconds to store the frequency of the words in dracula and around 1.5 to 2 seconds for the other texts. BinarySearchTreeMap took the least amount to time to store and update the frequency of the words in the texts. AvlTreeMap and TreapMap took approximately the same amount of time for all three to the texts and were not that must slower than the BinarySearchTreeMap. BinarySearchTreeMap, AvlTreeMap, and TreapMap have very similar times for each of the texts because they all have the base structure of a binary tree. Because SimpleMap uses a list to store all the key value entries, every time it looks for a key it must scan the entire list. Therefore, worst case scenario SimpleMap will have O(N) time for the find function while the other maps will take less time (O(logN) for AvlTreeMap, approximately O(logN) for TreapMap and less than O(N) for BinarySearchTreeMap) because they do not compare the given key to all of the values in the map. BinarySearchTreeMap is slightly faster than AvlTreeMap and TreapMap because it does not have to make sure the tree is balanced or that the max priority structure is preserved after every insert or removal and perform rotations to achieve that state. TreapMap is slightly slower than AvlTreeMap because max priority ordering does not ensure that the find and insertion operations is O(logN) while balancing the binary search tree (AvlTreeMap) does. Because the data sets are natural language, the frequency of the words will be skewed and may favor end side of the alphabet over the other. 

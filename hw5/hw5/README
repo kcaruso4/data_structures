@@ -1,0 +1,65 @@
+Keilani Caruso, kcaruso4, kcaruso4@jhu.edu
+
+Discussion
+Part A:
+Description of Errors in LinkedList:
+The first error was in my previousWorks() test and it was the exceptions.positionException. The line of code in LinkedList.java that caused this in previous() was "if (this.last(p)) { throw new PositionException();}". Because the function tests to see if there is a previous position, the exception should only be thrown if the parameter is the first position.Therefore, I changed the code to be "if (this.first(p)) { throw new PositionException();}" because the first position has no previous position that can be returned.
+The second error in that was thrown was the java.lang.AssertionError that corresponded to the failure of "try { it.next(); assertTrue(false);} catch (NoSuchElementException e) {//should be caught}" in my newListBackward() test. This failed because in the iterator next(), that statement if (!this.hasNext()) was not true and the NoSuchElementException object was not thrown. This was because the hasNext() was only written for the forward iterator. To resolve this I checked to see if forward == true in hasNext() and if it wasn't (in the case of a backward iterator), the function returned this.current != LinkedList.this.sentinelHead.
+The last error I got was also a java.lang.AssertionError that corresponded to the failure of "try { it.next(); assertTrue(false);} catch (NoSuchElementException e) {//should be caught}" in the backwardWorks() test. This failure was caused by the same issue described in my second issue and was resolved when I fixed hasNext() to apply to the backward iterator.
+
+Testing the set implementations with different data sets.
+
+The different data sets I decided to run on the set implementations were: a set of 9980 unique integers that were ascending order, a set of 9980 unique integers in random order, a set of 4967 unique integers in random order, a set of 10,000 where 1000 unique integers were repeated 10 times, and a set of 10,000 integers such that the first 2,000 were ensured unique integers and the other 8,000 were randomly selected integers from 1 to 10,000. For the most part all of the data was equally distributed across a range, I unfortunately was unable to test a normally distributed set of data.
+
+There were measurable differences in how long Unique took to run with each Set implementation. The time each implementation took for the different data sets is outlined below.
+
+ListSet:
+    Ordered: 0.754014
+    Random: 0.746177
+    RandomSmall: 0.187123
+    Repeat10: 0.668061
+    RepeatRandom 0.726859
+
+LinkedSet:
+    Ordered: 0.725055
+    Random: 0.729058
+    RandomSmall: 0.183746
+    Repeat10: 0.066266
+    RepeatRandom: 0.673215
+
+ArraySet:
+    Ordered: 0.175456
+    Random: 0.185667
+    RandomSmall: 0.052451
+    Repeat10: 0.033088
+    RepeatRandom: 0.154909
+
+The ArraySet implementation took significantly less time than the other implementation sets because since the array length is doubled every time it is filled, the insertion time is amortized. Therefore for large data sets, to insert a value into the set one must simply directly iterator through the array set and if the value is not found add the new value at the next available spot. Also because an array is stored in the same memory location (in contrast to how nodes are stored in different location) which can have a slight impact on time compared to the linked list. LinkedSet and ListSet have extremely similar performance times because ListSet uses a LinkedList object and LinkedSet is a linked list. LinkedSet is slightly faster because it has direct access to the set unlike ListSet which must use the LinkedList functions to access the set and its values.  The only major difference in times between LinkedSet and ListSet are when they insert the RepeatRandom data set. I am not sure why this insert took longer considering they both use the position of the values to iterate through the set and find a specific value. When looking at the times for each of the different sets, out of all the sets that had approximately 10,000 values, Repeat10 was surprisingly the fastest. I believe that this is because once the first 1,000 values are inserted into the set then the 9,000 other values only require comparisons (no nodes need to be created and the array does not need to be resized). I believe that the times for ordered and random are almost the same because all of the values in the data set are unique and therefore a full check of the set is performed for each value on top of adding it to the set. RepeatRandom is slightly less than Ordered and Random because there are most likely repeated values and therefore decreases the amount of time spent to add the value. I decided to use RandomSmall to look at the time difference between a large random and a small random set. Based off of all of the times although the size of the set is doubled, the time required to insert the values into the set is not doubled. Rather the times indicate an increasing exponential growth. This growth rate is most likely caused by the drastic increase in comparisons performed on top of inserting twice the amount of values.
+
+Part B:
+
+TransposeArraySet<T>:
+    Ordered: 0.186610
+    Random: 0.175960
+    RandomSmall: 0.049360
+    Repeat10: 0.036252
+    RepeatRandom: 0.155054
+
+MoveToFrontListSet<T>
+    Ordered: 0.757181
+    Random: 0.734079
+    RandomSmall: 0.191541
+    Repeat10: 0.607272
+    RepeatRandom: 0.754056
+
+There were no noticeable difference between the TransposeArraySet and the ArraySet implementations. I honestly did not expect to see any significant improvements because the values were only shifted forward by one position and most of the values in my data sets were repeated little to no times. There were slight differences between MoveToFrontListSet and ListSet. Ordered, random, and randomsmall had similar run times because all the values in the data set were unique, therefore the next value being inserted was never found and MoveToFrontListSet acted like a normal ListSet. Repeat10 was a little more quicker for MoveToFrontListSet. The only way I can explain this is by moving the values that were found to the front made the comparison more efficient. But I am still a little confused how the difference in time could be so as significant considering my repeat10 data set was the value 1,000 to 1 in descending order 10 times so MoveToFrontListSet should not be any different than ListSet because after each pass the set would look like it did after the first 1000 were initially inserted. The types of data sets that heuristics would perform particularly well on would be any set of data that has a distribution (it would perform very well on a randomized list of skewed integers). I believe this to be true because by having values appear at varying frequencies, moving the more frequent values to the front will make checking to see if the set has a value more efficient. Because I did not have a lot repetition in my data set, the heuristics did not have a large impact on insertion times.
+
+Part C:
+
+To implement Union on unordered sets with an array that are sizes N and M. I would create an array of length N + M then add all the values from the set of N values. After that, for each value in the set of M numbers I would scan the array and if not found add it to the next available position in the array set. For the worst case scenario, the resulting efficiency would be O(NM). If I used a linked set implementation and the sets N and M had repeated values, then the implementation would be more space efficient than the array implementation. For worst case scenario the time efficiency would also be O(NM) because you an immediately add the values from the set of N values and then need to go through and compare all the values of the set of size M then insert all of them. I would also expect that linked set implementation to take a little longer because every time a value is inserted to a set a node must be created and linked.
+
+To implement Union on an ordered set if implemented with an array I would create an array of size N + M like before. I would then add the values from the set of size N and then for each value in the set of size M perform a binary search to see if the value is already there. If not in the union set, I would then insert the value in the correct position and shift the greater values up a position. The resulting efficiency would be O(log(N)M). If I used a linked set implementation, to look to see if the values in M are repeated in N I would have to iterate through the entire linked set because binary search is inefficient on a linked list. Therefore the efficiency would be like the efficiency of the unordered set, O(NM).
+
+To implement Intersection on unordered sets with N and M values. Let M > N, I would create and array of size N and then I would then compare all the values in the set of size N to the values in the set of size M. If a value is found in both M and N I would inert it into the Intersection array. Therefore the efficiency would be O(NM). The linked set implementation would also have the same efficiency because you would have to iterate through the entire set for each value in the other set to determine if the value appears in both set. The only difference, like previously stated, would be the space efficiency is maximized but the creating of a node each time a value is added to the intersection set would result in a greater time cost.
+
+To implement Intersection on ordered sets with N and M values. Let M > N, I would create an array of size N and then for every value in set of size N I would perform a binary search on the set of size M. If the value is found in both the set of size M and size N I would then add it to the intersection set. The time efficiency would be O(log(M)N). Because binary search is inefficient for linked lists, to see if the values in N are in M you have to iterate through all of set M for each value in N. Therefore the efficiency would be O(MN). The set list implementation would be more space efficient because it would only take up as much memory as need be. Obviously the time efficiencies are different because you perform a binary search on an array and linear search on a linked list. 

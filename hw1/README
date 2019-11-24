@@ -1,0 +1,30 @@
+Keilani Caruso kcaruso4 kcaruso4@jhu.edu
+Part A:
+1. My algorithm creates an array the size of the values entered in the command line where every element is 0. Then for every element entered in the command line I parse the new array and if the element is not found I store the element in the array and counted how many elements I stored. After checking all the elements in the command line I print each element stored in the new array on a separate line.
+2. I originally thought about creating a new array every time I found a new unique element. I decided to not go with this plan because that manor would take more time and more memory than the current way.
+3.Because I was changing string values to integers, I had a hard time trying to handle the NumberFormatException and being able to properly add the unique value to the array. I got around this issue by using a try catch block to throw the proper exception.
+
+Part B:
+1. ResetableCounter extending Counter allows the interface to inherit the abstract functions declared in Counter.
+2.Because ResetableCounter extends Counter, any instance of ResetableCounter can be considered a Counter because it will have all access to all the functions declared in Counter. Because ResetableCounter implements Counter, any Counter is not a ResetableCounter because it will not contain the reset function.
+3. Because all of the specific counters implement ResetableCounter, an array of ResetableCounters is able to contain references to objects of the specific counters. Thus allowing for more flexibility in what the array contains and what the function is able to access.
+
+
+Part C:
+adt MultiCounter
+  uses Integer
+  defines MultiCounter
+  operations
+    new: Integer x Integer ---> MultiCounter
+    up: MultiCounter ---> MultiCounter
+    down: MultiCounter ---> MultiCounter
+    value: MultiCounter ---> Integer
+  axioms:
+    value(new(s, d)) = s
+    value(up(c)) = value(c)*d
+    value(down(c)) = ceil(value(c)/d)
+
+Note: the piazza post said to ignore the fact that the integer by which the counter changes cannot legally be zero.
+
+1. The FlexibleCounter and MultiCounter ADTs seems more abstract than the Counter ADTs because they both have the ability to manipulate the counter by a given factor in a more complicated way. Whereas the Counter ADT can only change it by adding or subtracting one.
+2. For a more general purpose Counter ADT, I would still use Integer and define the Counter with the same operations (new, up, down, and value). For the axioms I would keep the value(new(..)) axiom the same. And for up and down, I would state that the value of the counter after down is applied is less than the value of the counter while the value of the counter after up is applied is greater than the value of the counter.
